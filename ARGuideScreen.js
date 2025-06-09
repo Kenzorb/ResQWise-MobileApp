@@ -6,10 +6,12 @@ import {
   Image, 
   TouchableOpacity, 
   ScrollView,
-  Dimensions 
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons, MaterialIcons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 export default function ARGuideScreen() {
   const navigation = useNavigation();
@@ -40,8 +42,8 @@ export default function ARGuideScreen() {
   ];
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={styles.container}>
+
         {/* Header with Logo and Settings */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -55,6 +57,7 @@ export default function ARGuideScreen() {
             <Ionicons name="settings-outline" size={24} color="#333" />
           </TouchableOpacity>
         </View>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
 
         {/* AR Guide Title and Description */}
         <View style={styles.titleContainer}>
@@ -148,7 +151,7 @@ export default function ARGuideScreen() {
           <Text style={styles.navText}>Training</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -162,14 +165,17 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     paddingHorizontal: 15,
+    paddingTop: 15,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 50,
+    paddingTop: 20,
     paddingBottom: 20,
-    paddingHorizontal: 5,
+    paddingHorizontal: 15,
+    borderBottomColor: '#f0f0f0',
+    backgroundColor: 'white',
   },
   headerLeft: {
     flexDirection: 'row',

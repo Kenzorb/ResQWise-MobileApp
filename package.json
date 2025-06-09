@@ -24,7 +24,9 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "^4.11.1",
     "react-native-web": "^0.20.0",
-    "sonner-native": "^0.20.0"
+    "sonner-native": "^0.20.0",
+    "expo-camera": "~16.1.7",
+    "expo-image-manipulator": "~13.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

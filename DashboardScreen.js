@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons, MaterialIcons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
@@ -19,16 +20,16 @@ export default function DashboardScreen() {
   ]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      {/* Header with Logo */}
+      <View style={styles.header}>
+        <Image 
+          source={{ uri: 'https://api.a0.dev/assets/image?text=ResqWise+Logo+ECG+Heart+Line&aspect=1:1&seed=123' }} 
+          style={styles.logo}
+        />
+        <Text style={styles.logoText}>RESQWISE</Text>
+      </View>
       <ScrollView style={styles.scrollView}>
-        {/* Header with Logo */}
-        <View style={styles.header}>
-          <Image 
-            source={{ uri: 'https://api.a0.dev/assets/image?text=ResqWise+Logo+ECG+Heart+Line&aspect=1:1&seed=123' }} 
-            style={styles.logo}
-          />
-          <Text style={styles.logoText}>RESQWISE</Text>
-        </View>
 
         {/* Emergency Assistance Card */}
         <View style={styles.card}>
@@ -60,7 +61,7 @@ export default function DashboardScreen() {
           
           <TouchableOpacity 
             style={styles.learningButton}
-            onPress={() => navigation.navigate('Modules')}
+            onPress={() => navigation.navigate('Training')}
           >
             <Text style={styles.learningButtonText}>Start Learning</Text>
           </TouchableOpacity>
@@ -128,7 +129,7 @@ export default function DashboardScreen() {
           <Text style={styles.navText}>Training</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -142,13 +143,16 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     paddingHorizontal: 15,
+    paddingTop: 15,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 50,
+    paddingTop: 20,
     paddingBottom: 20,
-    paddingHorizontal: 5,
+    paddingHorizontal: 15,
+    borderBottomColor: '#f0f0f0',
+    backgroundColor: 'white',
   },
   logo: {
     width: 30,

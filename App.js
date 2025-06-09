@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, CardStyleInterpolators } from '@react-navigation/native-stack';
 import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Toaster } from 'sonner-native';
@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator();
 
 function RootStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: false, animation: 'fade'}}>
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
       <Stack.Screen name="Training" component={TrainingScreen} />
@@ -35,7 +35,7 @@ export default function App() {
     <SafeAreaProvider style={styles.container}>
       <Toaster />
       <NavigationContainer>
-        <RootStack />
+          <RootStack />
       </NavigationContainer>
     </SafeAreaProvider>
   );

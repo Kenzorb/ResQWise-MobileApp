@@ -1,13 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+
 
 export default function AIWoundAnalyserScreen() {
   const navigation = useNavigation();
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null)
+
+  //For camera
+  const [facing, setFacing] = useState('back');
+  const [permission, requestPermission] = useCameraPermissions();
+
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>We need your permission to show the camera</Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
+
+  function toggleCameraFacing() {
+    setFacing(current => (current === 'back' ? 'front' : 'back'));
+  }
+
 
   const startAnalysis = () => {
     setAnalyzing(true);
@@ -34,16 +60,21 @@ export default function AIWoundAnalyserScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header with Logo and Settings */}
       <View style={styles.header}>
-        <Image 
-          source={{ uri: 'https://api.a0.dev/assets/image?text=RESQWISE&aspect=1:1' }}
-          style={styles.logo}
-        />
-        <Text style={styles.headerTitle}>AI Wound Analyser</Text>
-        <Ionicons name="settings-outline" size={24} color="#333" />
+          <View style={styles.headerLeft}>
+              <Image 
+                  source={{ uri: 'https://api.a0.dev/assets/image?text=ResqWise+Logo+ECG+Heart+Line&aspect=1:1&seed=123' }} 
+                  style={styles.logo}
+              />
+              <Text style={styles.logoText}>RESQWISE</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+              <Ionicons name="settings-outline" size={24} color="#333" />
+          </TouchableOpacity>
       </View>
-
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.scrollView}>
+        
         <View style={styles.card}>
           <Text style={styles.title}>Wound Analysis</Text>
           <Text style={styles.subtitle}>
@@ -52,10 +83,16 @@ export default function AIWoundAnalyserScreen() {
 
           {!result ? (
             <View style={styles.cameraContainer}>
-              <Image 
-                source={{ uri: 'https://api.a0.dev/assets/image?text=Camera+View&aspect=16:9' }}
-                style={styles.cameraPreview}
-              />
+              <CameraView style={styles.cameraPreview2} facing={facing}>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.cambutton} onPress={toggleCameraFacing}>
+                    
+                    <Image style={styles.camtext} source={require('./assets/flipcam.png')}></Image>
+                  </TouchableOpacity>
+                </View>
+              </CameraView>
+
+
               <TouchableOpacity 
                 style={[styles.button, analyzing && styles.analyzingButton]} 
                 onPress={startAnalysis}
@@ -150,18 +187,35 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f7',
   },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: 15,
+    paddingTop: 15,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
+    paddingTop: 20,
+    paddingBottom: 20,
+    paddingHorizontal: 15,
+    borderBottomColor: '#f0f0f0',
+    backgroundColor: 'white',
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   logo: {
     width: 30,
     height: 30,
     resizeMode: 'contain',
+  },
+  logoText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#4263eb',
+    marginLeft: 8,
   },
   headerTitle: {
     fontSize: 18,
@@ -182,6 +236,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    height: 550,
   },
   title: {
     fontSize: 22,
@@ -197,9 +252,9 @@ const styles = StyleSheet.create({
   cameraContainer: {
     alignItems: 'center',
   },
-  cameraPreview: {
+  cameraPreview2: {
     width: '100%',
-    height: 220,
+    height: '75%',
     borderRadius: 8,
     marginBottom: 16,
   },
@@ -306,21 +361,15 @@ const styles = StyleSheet.create({
   },
   bottomNav: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
+    paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
-    paddingBottom: 12,
-    paddingTop: 8,
+    borderTopColor: '#f0f0f0',
   },
   navItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  activeNavItem: {
-    borderTopWidth: 3,
-    borderTopColor: '#4263eb',
   },
   navText: {
     fontSize: 12,
@@ -329,5 +378,30 @@ const styles = StyleSheet.create({
   },
   activeNavText: {
     color: '#4263eb',
+    fontWeight: '500',
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+    margin: 64,
+  },
+  cambutton: {
+    flex: 1,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+  },
+  camtext: {
+    position: 'absolute',
+    top: -130,
+    right: -35,
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
+    tintColor: '#fff',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Circular dark backdrop
+    borderRadius: 16, // Half of width/height = perfect circle
+    padding: 6,       // Inner spacing for visual balance (optional)
+    zIndex: 10,
   }
 });

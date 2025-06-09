@@ -6,7 +6,8 @@ import {
   Image, 
   TouchableOpacity, 
   ScrollView,
-  Dimensions
+  Dimensions,
+  SafeAreaView
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons, MaterialIcons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -250,21 +251,22 @@ export default function FactsOrCapScreen() {
   );
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        {/* Header with Logo and Settings */}
+    <SafeAreaView style={styles.container}>
+
+      {/* Header with Logo and Settings */}
         <View style={styles.header}>
-          <View style={styles.headerLeft}>
+            <View style={styles.headerLeft}>
             <Image 
-              source={{ uri: 'https://api.a0.dev/assets/image?text=ResqWise+Logo+ECG+Heart+Line&aspect=1:1&seed=123' }} 
-              style={styles.logo}
+                source={{ uri: 'https://api.a0.dev/assets/image?text=ResqWise+Logo+ECG+Heart+Line&aspect=1:1&seed=123' }} 
+                style={styles.logo}
             />
             <Text style={styles.logoText}>RESQWISE</Text>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
             <Ionicons name="settings-outline" size={24} color="#333" />
-          </TouchableOpacity>
+            </TouchableOpacity>
         </View>
+      <ScrollView style={styles.scrollView}>
 
         {/* Game Header */}
         <View style={styles.gameHeaderContainer}>
@@ -364,7 +366,7 @@ export default function FactsOrCapScreen() {
           <Text style={[styles.navText, styles.activeNav]}>Training</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -378,14 +380,17 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     paddingHorizontal: 15,
+    paddingTop: 15,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 50,
+    paddingTop: 20,
     paddingBottom: 20,
-    paddingHorizontal: 5,
+    paddingHorizontal: 15,
+    borderBottomColor: '#f0f0f0',
+    backgroundColor: 'white',
   },
   headerLeft: {
     flexDirection: 'row',
